@@ -408,7 +408,15 @@
         <argument type="service" id=".service_locator.CDOTD6..App\Controller\UtilisateurController"/>
       </call>
     </service>
+    <service id="App\Repository\ComptbankRepository" class="App\Repository\ComptbankRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
     <service id="App\Repository\PartenaireRepository" class="App\Repository\PartenaireRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
+    <service id="App\Repository\TransactionRepository" class="App\Repository\TransactionRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
     </service>
@@ -1435,6 +1443,14 @@
         <argument>2048</argument>
       </call>
       <call method="addListener">
+        <argument>console.command</argument>
+        <argument type="collection">
+          <argument type="service" id="debug.debug_handlers_listener"/>
+          <argument>configure</argument>
+        </argument>
+        <argument>2048</argument>
+      </call>
+      <call method="addListener">
         <argument>kernel.exception</argument>
         <argument type="collection">
           <argument type="service" id="debug.debug_handlers_listener"/>
@@ -2339,7 +2355,7 @@
       <argument type="iterator">
         <argument key="security.firewall.map.context.dev" type="service" id=".security.request_matcher.Iy.T22O"/>
         <argument key="security.firewall.map.context.login" type="service" id=".security.request_matcher.HeUdK73"/>
-        <argument key="security.firewall.map.context.api" type="service" id=".security.request_matcher.aHKRvEv"/>
+        <argument key="security.firewall.map.context.api" type="service" id=".security.request_matcher.p4VlLPC"/>
       </argument>
     </service>
     <service id="security.firewall.context" class="Symfony\Bundle\SecurityBundle\Security\FirewallContext" public="false" abstract="true">
@@ -2874,7 +2890,7 @@
     <service id="security.firewall.map.config.api" class="Symfony\Bundle\SecurityBundle\Security\FirewallConfig" public="false">
       <argument>api</argument>
       <argument>security.user_checker</argument>
-      <argument>.security.request_matcher.aHKRvEv</argument>
+      <argument>.security.request_matcher.p4VlLPC</argument>
       <argument>true</argument>
       <argument>true</argument>
       <argument>security.user.provider.concrete.app_user_provider</argument>
@@ -2887,8 +2903,8 @@
       </argument>
       <argument>null</argument>
     </service>
-    <service id=".security.request_matcher.aHKRvEv" class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
-      <argument>^/api/m</argument>
+    <service id=".security.request_matcher.p4VlLPC" class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
+      <argument>^/api</argument>
     </service>
     <service id="security.authentication.provider.guard.api" class="Symfony\Component\Security\Guard\Provider\GuardAuthenticationProvider" public="false">
       <argument type="iterator">
@@ -3132,7 +3148,7 @@
       <factory class="Doctrine\ORM\EntityManager" method="create"/>
     </service>
     <service id="doctrine.orm.container_repository_factory" class="Doctrine\Bundle\DoctrineBundle\Repository\ContainerRepositoryFactory" public="false">
-      <argument type="service" id=".service_locator.3Tt52.."/>
+      <argument type="service" id=".service_locator.z25Th3A"/>
     </service>
     <service id="doctrine.orm.manager_configurator.abstract" class="Doctrine\Bundle\DoctrineBundle\ManagerConfigurator" abstract="true">
       <argument type="collection"/>
@@ -4528,8 +4544,12 @@
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\UtilisateurController" class="App\Controller\UtilisateurController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\UtilisateurController" class="App\Controller\UtilisateurController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\UtilisateurController" class="App\Controller\UtilisateurController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\ComptbankRepository" class="App\Repository\ComptbankRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\ComptbankRepository" class="App\Repository\ComptbankRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\PartenaireRepository" class="App\Repository\PartenaireRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\PartenaireRepository" class="App\Repository\PartenaireRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\TransactionRepository" class="App\Repository\TransactionRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\TransactionRepository" class="App\Repository\TransactionRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\UtilisateurRepository" class="App\Repository\UtilisateurRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\UtilisateurRepository" class="App\Repository\UtilisateurRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id="maker.auto_command.make_auth" class="Symfony\Bundle\MakerBundle\Command\MakerCommand" public="false">
@@ -4805,10 +4825,12 @@
         <argument key="doctrine.orm.default_listeners.attach_entity_listeners" type="service" id="doctrine.orm.default_listeners.attach_entity_listeners"/>
       </argument>
     </service>
-    <service id=".service_locator.3Tt52.." class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id=".service_locator.z25Th3A" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
+        <argument key="App\Repository\ComptbankRepository" type="service" id="App\Repository\ComptbankRepository"/>
         <argument key="App\Repository\PartenaireRepository" type="service" id="App\Repository\PartenaireRepository"/>
+        <argument key="App\Repository\TransactionRepository" type="service" id="App\Repository\TransactionRepository"/>
         <argument key="App\Repository\UtilisateurRepository" type="service" id="App\Repository\UtilisateurRepository"/>
       </argument>
     </service>
