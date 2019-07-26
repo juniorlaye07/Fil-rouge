@@ -85,7 +85,7 @@ class Utilisateur implements UserInterface
      */
     public function getRoles(): array
     {
-        $role = $this->roles;
+        $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
         $roles[] = 'SuperADMIN,ADMINparten,USER';
 
