@@ -85,9 +85,9 @@ class Utilisateur implements UserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
+        $role = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles[] = 'SuperADMIN,ADMINparten,USER';
 
         return array_unique($roles);
     }
@@ -127,8 +127,6 @@ class Utilisateur implements UserInterface
      */
     public function eraseCredentials()
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
     }
 
     public function getNom(): ?string
