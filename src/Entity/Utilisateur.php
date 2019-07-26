@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
-
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UtilisateurRepository")
  */
@@ -85,7 +84,7 @@ class Utilisateur implements UserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
+        $role = $this->roles;
         // guarantee every user at least has ROLE_USER
         $roles[] = 'SuperADMIN,ADMINparten,USER';
 

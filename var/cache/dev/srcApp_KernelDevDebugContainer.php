@@ -16,6 +16,6 @@ if (!\class_exists(srcApp_KernelDevDebugContainer::class, false)) {
 
 return new \ContainerDj9W5Ko\srcApp_KernelDevDebugContainer([
     'container.build_hash' => 'Dj9W5Ko',
-    'container.build_id' => 'b933a4cc',
-    'container.build_time' => 1564162477,
+    'container.build_id' => '636c923d',
+    'container.build_time' => 1564163200,
 ], __DIR__.\DIRECTORY_SEPARATOR.'ContainerDj9W5Ko');
