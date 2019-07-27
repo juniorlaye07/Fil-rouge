@@ -7,6 +7,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * @Route("/api")
@@ -43,5 +45,33 @@ class PartenaireController extends AbstractController
             'message' => 'Vous devez renseigner les clés de ninea et du raisonsocial'
         ];
         return new JsonResponse($data, 500);
+    }
+    /**
+     * @Route("/partenaire/{id}", name="updatparten", methods={"PUT"})
+     */
+    public function update(Request $request, SerializerInterface $serializer, Partenaire $parten, ValidatorInterface $validator, EntityManagerInterface $entityManager)
+    {
+        $partenUpdate = $entityManager->getRepository(Partenaire::class)->find($parten->getId());
+        $data = json_decode($request->getContent());
+        foreach ($data as $key => $value) {
+            if ($key && !empty($value)) {
+                $status = ucfirst($key);
+                $setter = 'set' . $status;
+                $partenUpdate->$setter($value);
+            }
+        }
+        $errors = $validator->validate($partenUpdate);
+        if (count($errors)) {
+            $errors = $serializer->serialize($errors, 'json');
+            return new Response($errors, 500, [
+                'Content-Type' => 'application/json'
+            ]);
+        }
+        $entityManager->flush();
+        $data = [
+            'statut' => 200,
+            'messag' => 'Le statuts du partenaire a été modifier'
+        ];
+        return new JsonResponse($data);
     }
 }

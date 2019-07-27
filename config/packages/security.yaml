@@ -38,8 +38,8 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/partenaire, roles: SuperADMIN }
-        # - { path: ^/utilisateur, roles: ADMINparten }
-        # - { path: ^/utilisateur, roles: USER }
+        # - { path: ^api/partenaire, roles: SuperAdmin }
+        # - { path: ^api/utilisateur, roles: AdminParten }
+        # - { path: ^api/utilisateur, roles: USER }
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }

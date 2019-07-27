@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UtilisateurRepository")
  */
@@ -18,6 +20,7 @@ class Utilisateur implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank
      */
     private $username;
 
@@ -34,28 +37,38 @@ class Utilisateur implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $prenom;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank
      */
     private $tel;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $status;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $profil;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Partenaire", inversedBy="utilisateurs")
+     */
+    private $id_partenaire;
 
     public function getId(): ?int
     {
@@ -86,7 +99,7 @@ class Utilisateur implements UserInterface
     {
         $role = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'SuperADMIN,ADMINparten,USER';
+        $roles[] = 'SuperADMIN';
 
         return array_unique($roles);
     }
@@ -97,7 +110,7 @@ class Utilisateur implements UserInterface
 
         return $this;
     }
-
+    
     /**
      * @see UserInterface
      */
@@ -184,6 +197,18 @@ class Utilisateur implements UserInterface
     public function setProfil(string $profil): self
     {
         $this->profil = $profil;
+
+        return $this;
+    }
+
+    public function getIdPartenaire(): ?Partenaire
+    {
+        return $this->id_partenaire;
+    }
+
+    public function setIdPartenaire(?Partenaire $id_partenaire): self
+    {
+        $this->id_partenaire = $id_partenaire;
 
         return $this;
     }

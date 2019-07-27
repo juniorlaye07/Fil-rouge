@@ -3,7 +3,10 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource()
@@ -20,33 +23,52 @@ class Partenaire
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $ninea;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $raisonsocial;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank
      */
     private $tel;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="cette cage ne doit pas etre vide")
      */
     private $adresse;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Email(
+     *     message = "The email '{{ value }}' l'email est invalide.",
+     *     checkMX = true
+     * )
      */
     private $adresse_mail;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $status;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Utilisateur", mappedBy="id_partenaire")
+     */
+    private $utilisateurs;
+
+    public function __construct()
+    {
+        $this->utilisateurs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -121,6 +143,37 @@ class Partenaire
     public function setStatus(string $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Utilisateur[]
+     */
+    public function getUtilisateurs(): Collection
+    {
+        return $this->utilisateurs;
+    }
+
+    public function addUtilisateur(Utilisateur $utilisateur): self
+    {
+        if (!$this->utilisateurs->contains($utilisateur)) {
+            $this->utilisateurs[] = $utilisateur;
+            $utilisateur->setIdPartenaire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUtilisateur(Utilisateur $utilisateur): self
+    {
+        if ($this->utilisateurs->contains($utilisateur)) {
+            $this->utilisateurs->removeElement($utilisateur);
+            // set the owning side to null (unless already changed)
+            if ($utilisateur->getIdPartenaire() === $this) {
+                $utilisateur->setIdPartenaire(null);
+            }
+        }
 
         return $this;
     }

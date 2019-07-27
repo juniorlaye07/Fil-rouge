@@ -32,7 +32,7 @@ class UtilisateurController extends AbstractController
     /**
      * @Route("/utilisateur", name="register", methods={"POST"})
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager)
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator, SerializerInterface $serializer, EntityManagerInterface $entityManager)
     {
         $values = json_decode($request->getContent());
        
@@ -46,12 +46,24 @@ class UtilisateurController extends AbstractController
             $user->setTel($values->tel);
             $user->setStatus($values->status);
             $user->setProfil($values->profil);
+            // migration des clés partenaire vers utilisateur
+            $repositor = $this->getDoctrine()->getRepository(Utilisateur::class);
+            $user = $repositor->find($values->createdby);
+            $parten = setCreatedby($user);
+            $errors = $validator->validate($parten);
+
+            if (count($errors)) {
+                $errors = $serializer->serialize($errors, 'json');
+                return new Response($errors, 500, [
+                    'Content-Type' => 'application/json'
+                ]);
+            }
             $entityManager->persist($user);
             $entityManager->flush();
 
             $data = [
-                'statut' => 201,
-                'messag' => 'L\'utilisateur a été créé'
+                'statuts' => 201,
+                'message' => 'L\'utilisateur a été créé'
             ];
 
             return new JsonResponse($data, 201);
@@ -61,5 +73,33 @@ class UtilisateurController extends AbstractController
             'messag' => 'Vous devez renseigner les clés d\'utilisateur et mot de passe'
         ];
         return new JsonResponse($data, 500);
+    }
+    /**
+     * @Route("/utilisateur/{id}", name="utilisaUpdate", methods={"PUT"})
+     */
+    public function update(Request $request, SerializerInterface $serializer, Partenaire $user, ValidatorInterface $validator, EntityManagerInterface $entityManager)
+    {
+        $utilisaUpdate = $entityManager->getRepository(Utilisateur::class)->find($user->getId());
+        $data = json_decode($request->getContent());
+        foreach ($data as $key => $values) {
+            if ($key && !empty($values)) {
+                $status = ucfirst($key);
+                $setter = 'set' . $status;
+                $utilisaUpdate->$setter($values);
+            }
+        }
+        $errors = $validator->validate($utilisaUpdate);
+        if (count($errors)) {
+            $errors = $serializer->serialize($errors, 'json');
+            return new Response($errors, 500, [
+                'Content-Type' => 'application/json'
+            ]);
+        }
+        $entityManager->flush();
+        $data = [
+            'statut' => 200,
+            'messag' => 'Le statuts de l\'utilisateur a été mis à jour'
+        ];
+        return new JsonResponse($data);
     }
 }
