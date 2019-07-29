@@ -2,21 +2,25 @@
 namespace App\Controller;
 
 use App\Entity\Utilisateur;
+use App\Entity\Partenaire;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response ;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+
 /**
  * @Route("/api")
  */
 class UtilisateurController extends AbstractController
 {
+//==================Login================================£=========================================================================================//
     /**
      * @Route("/login", name="login", methods={"POST"})
      */
@@ -29,8 +33,10 @@ class UtilisateurController extends AbstractController
             'username' => $user->getUsername()
         ]);
     }
+//====================Ajouter utilisateur==================================£========"================================================================================================================£
     /**
      * @Route("/utilisateur", name="register", methods={"POST"})
+     * @IsGranted("ROLE_SUPER_ADMIN", message="Acces refusé!")
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator, SerializerInterface $serializer, EntityManagerInterface $entityManager)
     {
@@ -40,24 +46,17 @@ class UtilisateurController extends AbstractController
             $user = new Utilisateur();
             $user->setUsername($values->username);
             $user->setPassword($passwordEncoder->encodePassword($user,$values->password));
-            $user->setRoles($user->getRoles());
+            $user->setRoles($user->getRoles(['ROLE_USER']));
             $user->setNom($values->nom);
             $user->setPrenom($values->prenom);
             $user->setTel($values->tel);
             $user->setStatus($values->status);
             $user->setProfil($values->profil);
-            // migration des clés partenaire vers utilisateur
-            $repositor = $this->getDoctrine()->getRepository(Utilisateur::class);
-            $user = $repositor->find($values->createdby);
-            $parten = setCreatedby($user);
-            $errors = $validator->validate($parten);
 
-            if (count($errors)) {
-                $errors = $serializer->serialize($errors, 'json');
-                return new Response($errors, 500, [
-                    'Content-Type' => 'application/json'
-                ]);
-            }
+            $repo = $this->getDoctrine()->getRepository(Partenaire::class)->find($values->id_partenaire);
+            $user->setIdPartenaire($repo);
+           
+            
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -74,10 +73,11 @@ class UtilisateurController extends AbstractController
         ];
         return new JsonResponse($data, 500);
     }
+//========================bloquer utilisateur========================£===============================================================================================//
     /**
      * @Route("/utilisateur/{id}", name="utilisaUpdate", methods={"PUT"})
      */
-    public function update(Request $request, SerializerInterface $serializer, Partenaire $user, ValidatorInterface $validator, EntityManagerInterface $entityManager)
+    public function updat(Request $request, SerializerInterface $serializer, Utilisateur $user, ValidatorInterface $validator, EntityManagerInterface $entityManager)
     {
         $utilisaUpdate = $entityManager->getRepository(Utilisateur::class)->find($user->getId());
         $data = json_decode($request->getContent());
@@ -102,4 +102,5 @@ class UtilisateurController extends AbstractController
         ];
         return new JsonResponse($data);
     }
+//======================================================================================================================================================//
 }

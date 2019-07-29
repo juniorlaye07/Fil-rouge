@@ -9,12 +9,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * @Route("/api")
  */
 class PartenaireController extends AbstractController
-{           
+{
+//==============Ajouter un partenaire====================================£============================================================//    
 /**
  * @Route("/partenaire", name="partenaire", methods={"POST"})
  */
@@ -46,6 +48,7 @@ class PartenaireController extends AbstractController
         ];
         return new JsonResponse($data, 500);
     }
+//=================Bloquer un partenaire========================£======================================================================================================//
     /**
      * @Route("/partenaire/{id}", name="updatparten", methods={"PUT"})
      */
@@ -75,3 +78,4 @@ class PartenaireController extends AbstractController
         return new JsonResponse($data);
     }
 }
+//=======================================================================================================================================================//

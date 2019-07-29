@@ -124,7 +124,19 @@
     <parameter key="twig.default_path">/home/juniorlaye/Apiredfil/templates</parameter>
     <parameter key="security.authentication.trust_resolver.anonymous_class">null</parameter>
     <parameter key="security.authentication.trust_resolver.rememberme_class">null</parameter>
-    <parameter key="security.role_hierarchy.roles" type="collection"/>
+    <parameter key="security.role_hierarchy.roles" type="collection">
+      <parameter key="ROLE_USER" type="collection">
+        <parameter>ROLE_USER</parameter>
+      </parameter>
+      <parameter key="ROLE_ADMINParten" type="collection">
+        <parameter>ROLE_USER</parameter>
+      </parameter>
+      <parameter key="ROLE_SuperADMIN" type="collection">
+        <parameter>ROLE_SuperADMIN</parameter>
+        <parameter>ROLE_ADMINParten</parameter>
+        <parameter>ROLE_USER</parameter>
+      </parameter>
+    </parameter>
     <parameter key="security.access.denied_url">null</parameter>
     <parameter key="security.authentication.manager.erase_credentials">true</parameter>
     <parameter key="security.authentication.session_strategy.strategy">migrate</parameter>
@@ -416,6 +428,10 @@
       </call>
     </service>
     <service id="App\Repository\ComptbankRepository" class="App\Repository\ComptbankRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
+    <service id="App\Repository\DepotArgentRepository" class="App\Repository\DepotArgentRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
     </service>
@@ -2341,14 +2357,15 @@
       <argument type="service" id="request_stack"/>
     </service>
     <service id="security.role_hierarchy" class="Symfony\Component\Security\Core\Role\RoleHierarchy" public="false">
-      <argument type="collection"/>
-    </service>
-    <service id="security.access.simple_role_voter" class="Symfony\Component\Security\Core\Authorization\Voter\RoleVoter" public="false">
-      <tag name="security.voter" priority="245"/>
+      <argument>%security.role_hierarchy.roles%</argument>
     </service>
     <service id="security.access.authenticated_voter" class="Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter" public="false">
       <tag name="security.voter" priority="250"/>
       <argument type="service" id="security.authentication.trust_resolver"/>
+    </service>
+    <service id="security.access.role_hierarchy_voter" class="Symfony\Component\Security\Core\Authorization\Voter\RoleHierarchyVoter" public="false">
+      <tag name="security.voter" priority="245"/>
+      <argument type="service" id="security.role_hierarchy"/>
     </service>
     <service id="security.access.expression_voter" class="Symfony\Component\Security\Core\Authorization\Voter\ExpressionVoter" public="false">
       <tag name="security.voter" priority="245"/>
@@ -2362,7 +2379,7 @@
       <argument type="iterator">
         <argument key="security.firewall.map.context.dev" type="service" id=".security.request_matcher.Iy.T22O"/>
         <argument key="security.firewall.map.context.login" type="service" id=".security.request_matcher.HeUdK73"/>
-        <argument key="security.firewall.map.context.api" type="service" id=".security.request_matcher.p4VlLPC"/>
+        <argument key="security.firewall.map.context.api" type="service" id=".security.request_matcher.uTv4pMG"/>
       </argument>
     </service>
     <service id="security.firewall.context" class="Symfony\Bundle\SecurityBundle\Security\FirewallContext" public="false" abstract="true">
@@ -2897,7 +2914,7 @@
     <service id="security.firewall.map.config.api" class="Symfony\Bundle\SecurityBundle\Security\FirewallConfig" public="false">
       <argument>api</argument>
       <argument>security.user_checker</argument>
-      <argument>.security.request_matcher.p4VlLPC</argument>
+      <argument>.security.request_matcher.uTv4pMG</argument>
       <argument>true</argument>
       <argument>true</argument>
       <argument>security.user.provider.concrete.app_user_provider</argument>
@@ -2910,8 +2927,8 @@
       </argument>
       <argument>null</argument>
     </service>
-    <service id=".security.request_matcher.p4VlLPC" class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
-      <argument>^/api</argument>
+    <service id=".security.request_matcher.uTv4pMG" class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
+      <argument>^/api/</argument>
     </service>
     <service id="security.authentication.provider.guard.api" class="Symfony\Component\Security\Guard\Provider\GuardAuthenticationProvider" public="false">
       <argument type="iterator">
@@ -3155,7 +3172,7 @@
       <factory class="Doctrine\ORM\EntityManager" method="create"/>
     </service>
     <service id="doctrine.orm.container_repository_factory" class="Doctrine\Bundle\DoctrineBundle\Repository\ContainerRepositoryFactory" public="false">
-      <argument type="service" id=".service_locator.z25Th3A"/>
+      <argument type="service" id=".service_locator.s9nKHpU"/>
     </service>
     <service id="doctrine.orm.manager_configurator.abstract" class="Doctrine\Bundle\DoctrineBundle\ManagerConfigurator" abstract="true">
       <argument type="collection"/>
@@ -4556,6 +4573,8 @@
     <service id=".abstract.instanceof.App\Controller\UtilisateurController" class="App\Controller\UtilisateurController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\ComptbankRepository" class="App\Repository\ComptbankRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\ComptbankRepository" class="App\Repository\ComptbankRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\DepotArgentRepository" class="App\Repository\DepotArgentRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\DepotArgentRepository" class="App\Repository\DepotArgentRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\PartenaireRepository" class="App\Repository\PartenaireRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\PartenaireRepository" class="App\Repository\PartenaireRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\TransactionRepository" class="App\Repository\TransactionRepository" autowire="true" abstract="true"/>
@@ -4748,15 +4767,30 @@
         <argument key="validator" type="service" id="validator"/>
       </argument>
     </service>
-    <service id=".service_locator.XYpZIP0" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id=".service_locator.nk9g.Cv" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
+        <argument key="entityManager" type="service" id="doctrine.orm.default_entity_manager"/>
+        <argument key="serializer" type="service" id="serializer"/>
+        <argument key="user" type="service" id=".errored..service_locator.nk9g.Cv.App\Entity\Utilisateur"/>
+        <argument key="validator" type="service" id="validator"/>
+      </argument>
+    </service>
+    <service id=".service_locator.hWJ6Cnu" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="App\Controller\CompteController::addDepot" type="service" id=".service_locator.ZIsCxOI"/>
+        <argument key="App\Controller\CompteController::new" type="service" id=".service_locator.ZIsCxOI"/>
         <argument key="App\Controller\PartenaireController::add" type="service" id=".service_locator.ZIsCxOI"/>
         <argument key="App\Controller\PartenaireController::update" type="service" id=".service_locator..paYi0V"/>
         <argument key="App\Controller\UtilisateurController::register" type="service" id=".service_locator.H3qnu8f"/>
+        <argument key="App\Controller\UtilisateurController::updat" type="service" id=".service_locator.nk9g.Cv"/>
+        <argument key="App\Controller\CompteController:addDepot" type="service" id=".service_locator.ZIsCxOI"/>
+        <argument key="App\Controller\CompteController:new" type="service" id=".service_locator.ZIsCxOI"/>
         <argument key="App\Controller\PartenaireController:add" type="service" id=".service_locator.ZIsCxOI"/>
         <argument key="App\Controller\PartenaireController:update" type="service" id=".service_locator..paYi0V"/>
         <argument key="App\Controller\UtilisateurController:register" type="service" id=".service_locator.H3qnu8f"/>
+        <argument key="App\Controller\UtilisateurController:updat" type="service" id=".service_locator.nk9g.Cv"/>
       </argument>
     </service>
     <service id=".service_locator.LtnrEkg" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
@@ -4831,8 +4865,8 @@
       <argument type="service" id="security.access.authenticated_voter"/>
       <argument type="service" id="debug.event_dispatcher"/>
     </service>
-    <service id="debug.security.voter.security.access.simple_role_voter" class="Symfony\Component\Security\Core\Authorization\Voter\TraceableVoter">
-      <argument type="service" id="security.access.simple_role_voter"/>
+    <service id="debug.security.voter.security.access.role_hierarchy_voter" class="Symfony\Component\Security\Core\Authorization\Voter\TraceableVoter">
+      <argument type="service" id="security.access.role_hierarchy_voter"/>
       <argument type="service" id="debug.event_dispatcher"/>
     </service>
     <service id="debug.security.voter.security.access.expression_voter" class="Symfony\Component\Security\Core\Authorization\Voter\TraceableVoter">
@@ -4848,10 +4882,11 @@
         <argument key="doctrine.orm.default_listeners.attach_entity_listeners" type="service" id="doctrine.orm.default_listeners.attach_entity_listeners"/>
       </argument>
     </service>
-    <service id=".service_locator.z25Th3A" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id=".service_locator.s9nKHpU" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Repository\ComptbankRepository" type="service" id="App\Repository\ComptbankRepository"/>
+        <argument key="App\Repository\DepotArgentRepository" type="service" id="App\Repository\DepotArgentRepository"/>
         <argument key="App\Repository\PartenaireRepository" type="service" id="App\Repository\PartenaireRepository"/>
         <argument key="App\Repository\TransactionRepository" type="service" id="App\Repository\TransactionRepository"/>
         <argument key="App\Repository\UtilisateurRepository" type="service" id="App\Repository\UtilisateurRepository"/>
@@ -4979,7 +5014,7 @@
     <service id="debug.security.access.decision_manager.inner" class="Symfony\Component\Security\Core\Authorization\AccessDecisionManager" public="false">
       <argument type="iterator">
         <argument type="service" id="debug.security.voter.security.access.authenticated_voter"/>
-        <argument type="service" id="debug.security.voter.security.access.simple_role_voter"/>
+        <argument type="service" id="debug.security.voter.security.access.role_hierarchy_voter"/>
         <argument type="service" id="debug.security.voter.security.access.expression_voter"/>
       </argument>
       <argument>affirmative</argument>
@@ -5019,12 +5054,12 @@
       <argument type="service" id="security.token_storage"/>
     </service>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver" public="false">
-      <argument type="service" id=".service_locator.XYpZIP0"/>
+      <argument type="service" id=".service_locator.hWJ6Cnu"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver" public="false"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver" public="false"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver" public="false">
-      <argument type="service" id=".service_locator.XYpZIP0"/>
+      <argument type="service" id=".service_locator.hWJ6Cnu"/>
     </service>
     <service id="api_platform.swagger.normalizer.api_gateway.inner" class="ApiPlatform\Core\Swagger\Serializer\DocumentationNormalizer" public="false">
       <argument type="service" id="api_platform.metadata.resource.metadata_factory.cached"/>
@@ -5062,6 +5097,7 @@
       <argument type="service" id="api_platform.path_segment_name_generator.underscore"/>
     </service>
     <service id=".errored..service_locator..paYi0V.App\Entity\Partenaire" class="App\Entity\Partenaire"/>
+    <service id=".errored..service_locator.nk9g.Cv.App\Entity\Utilisateur" class="App\Entity\Utilisateur"/>
     <service id="console.command_loader" class="Symfony\Component\Console\CommandLoader\ContainerCommandLoader" public="true">
       <argument type="service" id=".service_locator.A1Bx0QA"/>
       <argument type="collection">
@@ -5374,7 +5410,7 @@
     <service id="lexik_jwt_authentication.encoder" alias="lexik_jwt_authentication.encoder.lcobucci" public="true"/>
     <service id="Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface" alias="lexik_jwt_authentication.encoder.lcobucci"/>
     <service id="lexik_jwt_authentication.key_loader" alias="lexik_jwt_authentication.key_loader.raw" public="true"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.XYpZIP0"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.hWJ6Cnu"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem" public="false"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="api_platform.name_converter" alias="serializer.name_converter.metadata_aware"/>
