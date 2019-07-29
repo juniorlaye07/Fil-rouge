@@ -53,7 +53,7 @@ class UtilisateurController extends AbstractController
             $user->setStatus($values->status);
             $user->setProfil($values->profil);
 
-            $repo = $this->getDoctrine()->getRepository(Partenaire::class)->find($values->id_partenaire);
+            $repo = $this->getDoctrine()->getRepository(Partenaire::class)->find($values->idPartenaire);
             $user->setIdPartenaire($repo);
            
             

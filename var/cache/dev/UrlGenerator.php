@@ -4,8 +4,8 @@
 
 return [
     '_twig_error_test' => [['code', '_format'], ['_controller' => 'twig.controller.preview_error::previewErrorPageAction', '_format' => 'html'], ['code' => '\\d+'], [['variable', '.', '[^/]++', '_format', true], ['variable', '/', '\\d+', 'code', true], ['text', '/_error']], [], []],
-    'partenaire_new' => [[], ['_controller' => 'App\\Controller\\CompteController::new'], [], [['text', '/api/compte']], [], []],
-    'depot' => [[], ['_controller' => 'App\\Controller\\CompteController::addDepot'], [], [['text', '/api/depocompte']], [], []],
+    'comptbk' => [[], ['_controller' => 'App\\Controller\\CaisierController::new'], [], [['text', '/api/compte']], [], []],
+    'depot' => [[], ['_controller' => 'App\\Controller\\CaisierController::FaireDepot'], [], [['text', '/api/depocompte']], [], []],
     'partenaire' => [[], ['_controller' => 'App\\Controller\\PartenaireController::add'], [], [['text', '/api/partenaire']], [], []],
     'updatparten' => [['id'], ['_controller' => 'App\\Controller\\PartenaireController::update'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/api/partenaire']], [], []],
     'login' => [[], ['_controller' => 'App\\Controller\\UtilisateurController::login'], [], [['text', '/api/login']], [], []],

@@ -8,8 +8,8 @@
 return [
     false, // $matchHost
     [ // $staticRoutes
-        '/api/compte' => [[['_route' => 'partenaire_new', '_controller' => 'App\\Controller\\CompteController::new'], null, ['POST' => 0], null, false, false, null]],
-        '/api/depocompte' => [[['_route' => 'depot', '_controller' => 'App\\Controller\\CompteController::addDepot'], null, ['POST' => 0], null, false, false, null]],
+        '/api/compte' => [[['_route' => 'comptbk', '_controller' => 'App\\Controller\\CaisierController::new'], null, ['POST' => 0], null, false, false, null]],
+        '/api/depocompte' => [[['_route' => 'depot', '_controller' => 'App\\Controller\\CaisierController::FaireDepot'], null, ['POST' => 0], null, false, false, null]],
         '/api/partenaire' => [[['_route' => 'partenaire', '_controller' => 'App\\Controller\\PartenaireController::add'], null, ['POST' => 0], null, false, false, null]],
         '/api/login' => [
             [['_route' => 'login', '_controller' => 'App\\Controller\\UtilisateurController::login'], null, ['POST' => 0], null, false, false, null],

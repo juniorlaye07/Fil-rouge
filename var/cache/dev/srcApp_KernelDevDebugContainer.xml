@@ -406,11 +406,11 @@
   </parameters>
   <services>
     <service id="service_container" class="Symfony\Component\DependencyInjection\ContainerInterface" public="true" synthetic="true"/>
-    <service id="App\Controller\CompteController" class="App\Controller\CompteController" public="true" autowire="true" autoconfigure="true">
+    <service id="App\Controller\CaisierController" class="App\Controller\CaisierController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
       <call method="setContainer">
-        <argument type="service" id=".service_locator.CDOTD6..App\Controller\CompteController"/>
+        <argument type="service" id=".service_locator.CDOTD6..App\Controller\CaisierController"/>
       </call>
     </service>
     <service id="App\Controller\PartenaireController" class="App\Controller\PartenaireController" public="true" autowire="true" autoconfigure="true">
@@ -4562,9 +4562,9 @@
     <service id="lexik_jwt_authentication.security.jwt_user_provider" class="Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserProvider" public="false">
       <argument></argument>
     </service>
-    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\CompteController" class="App\Controller\CompteController" autowire="true" abstract="true"/>
-    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\CompteController" class="App\Controller\CompteController" autowire="true" abstract="true"/>
-    <service id=".abstract.instanceof.App\Controller\CompteController" class="App\Controller\CompteController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\CaisierController" class="App\Controller\CaisierController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\CaisierController" class="App\Controller\CaisierController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\CaisierController" class="App\Controller\CaisierController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\PartenaireController" class="App\Controller\PartenaireController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\PartenaireController" class="App\Controller\PartenaireController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\PartenaireController" class="App\Controller\PartenaireController" autowire="true" autoconfigure="true" abstract="true"/>
@@ -4776,17 +4776,17 @@
         <argument key="validator" type="service" id="validator"/>
       </argument>
     </service>
-    <service id=".service_locator.hWJ6Cnu" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id=".service_locator.klOXfQP" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
-        <argument key="App\Controller\CompteController::addDepot" type="service" id=".service_locator.ZIsCxOI"/>
-        <argument key="App\Controller\CompteController::new" type="service" id=".service_locator.ZIsCxOI"/>
+        <argument key="App\Controller\CaisierController::FaireDepot" type="service" id=".service_locator.ZIsCxOI"/>
+        <argument key="App\Controller\CaisierController::new" type="service" id=".service_locator.ZIsCxOI"/>
         <argument key="App\Controller\PartenaireController::add" type="service" id=".service_locator.ZIsCxOI"/>
         <argument key="App\Controller\PartenaireController::update" type="service" id=".service_locator..paYi0V"/>
         <argument key="App\Controller\UtilisateurController::register" type="service" id=".service_locator.H3qnu8f"/>
         <argument key="App\Controller\UtilisateurController::updat" type="service" id=".service_locator.nk9g.Cv"/>
-        <argument key="App\Controller\CompteController:addDepot" type="service" id=".service_locator.ZIsCxOI"/>
-        <argument key="App\Controller\CompteController:new" type="service" id=".service_locator.ZIsCxOI"/>
+        <argument key="App\Controller\CaisierController:FaireDepot" type="service" id=".service_locator.ZIsCxOI"/>
+        <argument key="App\Controller\CaisierController:new" type="service" id=".service_locator.ZIsCxOI"/>
         <argument key="App\Controller\PartenaireController:add" type="service" id=".service_locator.ZIsCxOI"/>
         <argument key="App\Controller\PartenaireController:update" type="service" id=".service_locator..paYi0V"/>
         <argument key="App\Controller\UtilisateurController:register" type="service" id=".service_locator.H3qnu8f"/>
@@ -4932,9 +4932,9 @@
         <argument key="twig" type="service" id="twig" on-invalid="ignore"/>
       </argument>
     </service>
-    <service id=".service_locator.CDOTD6..App\Controller\CompteController" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
-      <tag name="container.service_locator_context" id="App\Controller\CompteController"/>
-      <argument>App\Controller\CompteController</argument>
+    <service id=".service_locator.CDOTD6..App\Controller\CaisierController" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator_context" id="App\Controller\CaisierController"/>
+      <argument>App\Controller\CaisierController</argument>
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.CDOTD6." method="withContext"/>
     </service>
@@ -5054,12 +5054,12 @@
       <argument type="service" id="security.token_storage"/>
     </service>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver" public="false">
-      <argument type="service" id=".service_locator.hWJ6Cnu"/>
+      <argument type="service" id=".service_locator.klOXfQP"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver" public="false"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver" public="false"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver" public="false">
-      <argument type="service" id=".service_locator.hWJ6Cnu"/>
+      <argument type="service" id=".service_locator.klOXfQP"/>
     </service>
     <service id="api_platform.swagger.normalizer.api_gateway.inner" class="ApiPlatform\Core\Swagger\Serializer\DocumentationNormalizer" public="false">
       <argument type="service" id="api_platform.metadata.resource.metadata_factory.cached"/>
@@ -5410,7 +5410,7 @@
     <service id="lexik_jwt_authentication.encoder" alias="lexik_jwt_authentication.encoder.lcobucci" public="true"/>
     <service id="Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface" alias="lexik_jwt_authentication.encoder.lcobucci"/>
     <service id="lexik_jwt_authentication.key_loader" alias="lexik_jwt_authentication.key_loader.raw" public="true"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.hWJ6Cnu"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.klOXfQP"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem" public="false"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="api_platform.name_converter" alias="serializer.name_converter.metadata_aware"/>
