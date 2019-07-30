@@ -6,23 +6,34 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class UtilisateurControllerTest extends WebTestCase
 {
-    public function testregister()
+//======================================Teste Ajouts utilisateurs============================£=============================================================//
+      public function testregisterTRUE()
     {
     
-        $client = static::createClient();
+        $client = static::createClient([],
+            [ 'PHP_AUTH_USER'=>"layejunior07",
+              'PHP_AUTH_PW'=>"junior07"
+            ]
+        );
         $crawler = $client->request(
             'POST',
             '/api/utilisateur',[],[],
             ['CONTENT_TYPE' => 'application/json'],
-            '{"username":"layejunior07","password": "junior07","Ngom": "Abdoulaye","tel": 776418887,"status": "Actif","profil":"ROLE_SUPER_ADMIN"}');
+            '{"username":"layejunior07","password":"junior07","nom":"Ngom","prenom":"Abdoulaye","tel":"776418887","status":"Actif","profil":"SUPERADMIN","id_partenaire":}');
         $repo = $client->getResponse();
         var_dump($repo);
-        $this->assertSame(401, $client->getResponse()->getStatusCode());
+        $this->assertSame(201, $client->getResponse()->getStatusCode());
     }
-    public function testregisterFalse()
+    /* 
+     public function testregisterFALSE()
     {
 
-        $client = static::createClient();
+        $client = static::createClient([],
+            [
+                'PHP_AUTH_USER' => "layejunior07",
+                'PHP_AUTH_PW' => "junior07"
+            ]
+        );
         $crawler = $client->request(
             'POST',
             '/api/utilisateur',
@@ -34,42 +45,102 @@ class UtilisateurControllerTest extends WebTestCase
         $repo = $client->getResponse();
         var_dump($repo);
         $this->assertSame(400, $client->getResponse()->getStatusCode());
-    }
-    public function testadd()
+    } */
+    //========================================================Teste lister Partenaire==============================================================================//
+    public function testlistPartenTRUE()
     {
-        $client = static::createClient();
+        $client = static::createClient([],
+            [
+                'PHP_AUTH_USER' => "layejunior07",
+                'PHP_AUTH_PW' => "junior07"
+            ]
+        );
+        $crawler = $client->request('GET', '/api/listParten');
+        $jsonstring = "[
+                 {
+                    \"id\": 1,
+                    \"ninea\":\"2548ML\",
+                    \"raisonsocial\":\"ELTON\",
+                    \"adresse\":\"Dakar\",
+                    \"adresseMail\":\"janismoney@gmail.com\",
+                    \"tel\":339764188,
+                    \"status\": \"Bloquer\",
+                } 
+             ]";
+        $rep = $client->getResponse();
+        $this->assertSame(200, $client->getResponse()->getStatuscode());
+    } 
+    
+ //========================Teste Update==========================£=============================================================================//
+    /* public function testupdat()
+    {
+        $client = static::createClient([],
+            [
+                'PHP_AUTH_USER' => "layejunior07",
+                'PHP_AUTH_PW' => "junior07"
+            ]
+        );
+        $crawler = $client->request('PUT', '/api/partenaire/1');
+        $jsonstring = '[
+                 {
+                    "id": 1,
+                    "ninea":"2548ML",
+                    "raisonsocial":"ELTON",
+                    "adresse":"Dakar",
+                    "adresseMail":"janismoney@gmail.com",
+                    "tel":339764188,
+                    "status":"Actif"
+                } 
+             ]';
+        $rep = $client->getResponse();
+        $this->assertSame(201, $client->getResponse()->getStatuscode());
+    } */ 
+    //============================Teste Creation de Comptbank===========================================================================================================================================//
+     public function testnewTRUE()
+    {
+
+        $client = static::createClient([],
+            [
+                'PHP_AUTH_USER' => "layejunior07",
+                'PHP_AUTH_PW' => "junior07"
+            ]
+        );
         $crawler = $client->request(
             'POST',
-            '/api/partenaire',
-            [],
-            [],
+            '/api/compte',[],[],
             ['CONTENT_TYPE' => 'application/json'],
-            '{"ninea": "AH59L491","raisonsocial":"salmanSA","adresse":"St-louis","adresseMail"="salmamoney@yahoo.fr",tel":332289604,"status":"Bloquer"}'
-        );
-        $rep = $client->getResponse();
-        var_dump($rep);
+            '{
+                "numcompte": 184814,
+                "solde": 210000,
+                "idPartenaire":9
+  
+            }'
+      );
+        $repo = $client->getResponse();
+        var_dump($repo);
         $this->assertSame(201, $client->getResponse()->getStatusCode());
     }
-
-
-
-
-
-
-    public function testAddParten()
+    public function testnewFALSE()
     {
-        $client = static::createClient();
+
+        $client = static::createClient([],
+            [
+                'PHP_AUTH_USER' => "layejunior07",
+                'PHP_AUTH_PW' => "junior07"
+            ]
+        );
         $crawler = $client->request(
             'POST',
-            '/api/partenaire',
-            [],
-            [],
+            '/api/compte',[],[],
             ['CONTENT_TYPE' => 'application/json'],
-            '{"ninea": "295A96309SF","raisonsocial":"dfghjmlkjhgfd","adresse":"Mermoz","adresseMail":3232,"tel":"jcsvshv","status":"Bloquerdfghjkl"}'
+            '{
+                "numcompte":,
+                "solde": "jhxcv",
+                "idPartenaire":8
+            }'
         );
-        $rep = $client->getResponse();
-        var_dump($rep);
+        $repo = $client->getResponse();
+        var_dump($repo);
         $this->assertSame(400, $client->getResponse()->getStatusCode());
-    }
-
+    }  
 }
