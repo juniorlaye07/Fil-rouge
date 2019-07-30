@@ -1466,14 +1466,6 @@
         <argument>2048</argument>
       </call>
       <call method="addListener">
-        <argument>console.command</argument>
-        <argument type="collection">
-          <argument type="service" id="debug.debug_handlers_listener"/>
-          <argument>configure</argument>
-        </argument>
-        <argument>2048</argument>
-      </call>
-      <call method="addListener">
         <argument>kernel.exception</argument>
         <argument type="collection">
           <argument type="service" id="debug.debug_handlers_listener"/>
@@ -4192,7 +4184,7 @@
       <tag name="console.command" command="server:run"/>
       <argument>/home/juniorlaye/Apiredfil/public</argument>
       <argument>dev</argument>
-      <argument>/home/juniorlaye/Apiredfil</argument>
+      <argument>/home/juniorlaye/Apiredfil/var/cache</argument>
       <call method="setName">
         <argument>server:run</argument>
       </call>
@@ -4201,21 +4193,21 @@
       <tag name="console.command" command="server:start"/>
       <argument>/home/juniorlaye/Apiredfil/public</argument>
       <argument>dev</argument>
-      <argument>/home/juniorlaye/Apiredfil</argument>
+      <argument>/home/juniorlaye/Apiredfil/var/cache</argument>
       <call method="setName">
         <argument>server:start</argument>
       </call>
     </service>
     <service id="web_server.command.server_stop" class="Symfony\Bundle\WebServerBundle\Command\ServerStopCommand" public="false">
       <tag name="console.command" command="server:stop"/>
-      <argument>/home/juniorlaye/Apiredfil</argument>
+      <argument>/home/juniorlaye/Apiredfil/var/cache</argument>
       <call method="setName">
         <argument>server:stop</argument>
       </call>
     </service>
     <service id="web_server.command.server_status" class="Symfony\Bundle\WebServerBundle\Command\ServerStatusCommand" public="false">
       <tag name="console.command" command="server:status"/>
-      <argument>/home/juniorlaye/Apiredfil</argument>
+      <argument>/home/juniorlaye/Apiredfil/var/cache</argument>
       <call method="setName">
         <argument>server:status</argument>
       </call>
@@ -4758,6 +4750,13 @@
         <argument key="validator" type="service" id="validator"/>
       </argument>
     </service>
+    <service id=".service_locator.eIEYWuf" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="partenaireRepository" type="service" id="App\Repository\PartenaireRepository"/>
+        <argument key="serializer" type="service" id="serializer"/>
+      </argument>
+    </service>
     <service id=".service_locator.H3qnu8f" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -4776,19 +4775,30 @@
         <argument key="validator" type="service" id="validator"/>
       </argument>
     </service>
-    <service id=".service_locator.klOXfQP" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id=".service_locator.HOpYJK8" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="serializer" type="service" id="serializer"/>
+        <argument key="utilisateurRepository" type="service" id="App\Repository\UtilisateurRepository"/>
+      </argument>
+    </service>
+    <service id=".service_locator.GC4EQ1g" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Controller\CaisierController::FaireDepot" type="service" id=".service_locator.ZIsCxOI"/>
         <argument key="App\Controller\CaisierController::new" type="service" id=".service_locator.ZIsCxOI"/>
         <argument key="App\Controller\PartenaireController::add" type="service" id=".service_locator.ZIsCxOI"/>
+        <argument key="App\Controller\PartenaireController::list" type="service" id=".service_locator.eIEYWuf"/>
         <argument key="App\Controller\PartenaireController::update" type="service" id=".service_locator..paYi0V"/>
+        <argument key="App\Controller\UtilisateurController::list" type="service" id=".service_locator.HOpYJK8"/>
         <argument key="App\Controller\UtilisateurController::register" type="service" id=".service_locator.H3qnu8f"/>
         <argument key="App\Controller\UtilisateurController::updat" type="service" id=".service_locator.nk9g.Cv"/>
         <argument key="App\Controller\CaisierController:FaireDepot" type="service" id=".service_locator.ZIsCxOI"/>
         <argument key="App\Controller\CaisierController:new" type="service" id=".service_locator.ZIsCxOI"/>
         <argument key="App\Controller\PartenaireController:add" type="service" id=".service_locator.ZIsCxOI"/>
+        <argument key="App\Controller\PartenaireController:list" type="service" id=".service_locator.eIEYWuf"/>
         <argument key="App\Controller\PartenaireController:update" type="service" id=".service_locator..paYi0V"/>
+        <argument key="App\Controller\UtilisateurController:list" type="service" id=".service_locator.HOpYJK8"/>
         <argument key="App\Controller\UtilisateurController:register" type="service" id=".service_locator.H3qnu8f"/>
         <argument key="App\Controller\UtilisateurController:updat" type="service" id=".service_locator.nk9g.Cv"/>
       </argument>
@@ -5054,12 +5064,12 @@
       <argument type="service" id="security.token_storage"/>
     </service>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver" public="false">
-      <argument type="service" id=".service_locator.klOXfQP"/>
+      <argument type="service" id=".service_locator.GC4EQ1g"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver" public="false"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver" public="false"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver" public="false">
-      <argument type="service" id=".service_locator.klOXfQP"/>
+      <argument type="service" id=".service_locator.GC4EQ1g"/>
     </service>
     <service id="api_platform.swagger.normalizer.api_gateway.inner" class="ApiPlatform\Core\Swagger\Serializer\DocumentationNormalizer" public="false">
       <argument type="service" id="api_platform.metadata.resource.metadata_factory.cached"/>
@@ -5410,7 +5420,7 @@
     <service id="lexik_jwt_authentication.encoder" alias="lexik_jwt_authentication.encoder.lcobucci" public="true"/>
     <service id="Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface" alias="lexik_jwt_authentication.encoder.lcobucci"/>
     <service id="lexik_jwt_authentication.key_loader" alias="lexik_jwt_authentication.key_loader.raw" public="true"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.klOXfQP"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.GC4EQ1g"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem" public="false"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="api_platform.name_converter" alias="serializer.name_converter.metadata_aware"/>

@@ -16,6 +16,7 @@ return [
             [['_route' => 'api_login_check'], null, null, null, false, false, null],
         ],
         '/api/utilisateur' => [[['_route' => 'register', '_controller' => 'App\\Controller\\UtilisateurController::register'], null, ['POST' => 0], null, false, false, null]],
+        '/api/listes' => [[['_route' => 'list_partenaire', '_controller' => 'App\\Controller\\UtilisateurController::list'], null, ['POST' => 0], null, false, false, null]],
     ],
     [ // $regexpList
         0 => '{^(?'
