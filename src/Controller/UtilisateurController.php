@@ -37,7 +37,6 @@ class UtilisateurController extends AbstractController
 //====================Ajouter utilisateur==================================£========"================================================================================================================£
     /**
      * @Route("/utilisateur", name="register", methods={"POST"})
-     * @IsGranted("ROLE_SUPER_ADMIN", message="Acces refusé!")
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator, SerializerInterface $serializer, EntityManagerInterface $entityManager)
     {
@@ -54,7 +53,7 @@ class UtilisateurController extends AbstractController
             $user->setStatus($values->status);
             $user->setProfil($values->profil);
 
-            $repo = $this->getDoctrine()->getRepository(Partenaire::class)->find($values->idPartenaire);
+            $repo = $this->getDoctrine()->getRepository(Partenaire::class)->find($values->id_partenaire);
             $user->setIdPartenaire($repo);
            
             

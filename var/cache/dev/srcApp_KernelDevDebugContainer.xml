@@ -4184,7 +4184,11 @@
       <tag name="console.command" command="server:run"/>
       <argument>/home/adji/Fil-rouge/public</argument>
       <argument>dev</argument>
+<<<<<<< HEAD
       <argument>/home/adji/Fil-rouge/var/cache</argument>
+=======
+      <argument>/home/juniorlaye/Apiredfil/var/cache</argument>
+>>>>>>> bc54e8223b880ab2557bee0eca89659ecd8889d4
       <call method="setName">
         <argument>server:run</argument>
       </call>
@@ -4193,21 +4197,33 @@
       <tag name="console.command" command="server:start"/>
       <argument>/home/adji/Fil-rouge/public</argument>
       <argument>dev</argument>
+<<<<<<< HEAD
       <argument>/home/adji/Fil-rouge/var/cache</argument>
+=======
+      <argument>/home/juniorlaye/Apiredfil/var/cache</argument>
+>>>>>>> bc54e8223b880ab2557bee0eca89659ecd8889d4
       <call method="setName">
         <argument>server:start</argument>
       </call>
     </service>
     <service id="web_server.command.server_stop" class="Symfony\Bundle\WebServerBundle\Command\ServerStopCommand" public="false">
       <tag name="console.command" command="server:stop"/>
+<<<<<<< HEAD
       <argument>/home/adji/Fil-rouge/var/cache</argument>
+=======
+      <argument>/home/juniorlaye/Apiredfil/var/cache</argument>
+>>>>>>> bc54e8223b880ab2557bee0eca89659ecd8889d4
       <call method="setName">
         <argument>server:stop</argument>
       </call>
     </service>
     <service id="web_server.command.server_status" class="Symfony\Bundle\WebServerBundle\Command\ServerStatusCommand" public="false">
       <tag name="console.command" command="server:status"/>
+<<<<<<< HEAD
       <argument>/home/adji/Fil-rouge/var/cache</argument>
+=======
+      <argument>/home/juniorlaye/Apiredfil/var/cache</argument>
+>>>>>>> bc54e8223b880ab2557bee0eca89659ecd8889d4
       <call method="setName">
         <argument>server:status</argument>
       </call>
