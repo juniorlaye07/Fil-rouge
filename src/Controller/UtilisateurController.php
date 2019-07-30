@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Entity\Utilisateur;
 use App\Entity\Partenaire;
+use App\Repository\UtilisateurRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -101,6 +102,18 @@ class UtilisateurController extends AbstractController
             'messag' => 'Le statuts de l\'utilisateur a été mis à jour'
         ];
         return new JsonResponse($data);
+    }
+     /**
+     * @Route("/listes", name="list_partenaire", methods={"POST"})
+     */
+    public function list(UtilisateurRepository $utilisateurRepository, SerializerInterface $serializer)
+    {
+        $utilisateurs = $utilisateurRepository->findAll();
+        $data = $serializer->serialize($utilisateurs, 'json');
+
+        return new Response($data, 200, [
+            'Content-Type' => 'application/json'
+        ]);
     }
 //======================================================================================================================================================//
 }

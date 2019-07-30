@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Partenaire;
+use App\Repository\PartenaireRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -76,6 +77,19 @@ class PartenaireController extends AbstractController
             'messag' => 'Le statuts du partenaire a été modifier'
         ];
         return new JsonResponse($data);
+    }
+
+     /**
+     * @Route("/liste", name="list_partenaire", methods={"POST"})
+     */
+    public function list(PartenaireRepository $partenaireRepository, SerializerInterface $serializer)
+    {
+        $partenaires = $partenaireRepository->findAll();
+        $data = $serializer->serialize($partenaires, 'json');
+
+        return new Response($data, 200, [
+            'Content-Type' => 'application/json'
+        ]);
     }
 }
 //=======================================================================================================================================================//
