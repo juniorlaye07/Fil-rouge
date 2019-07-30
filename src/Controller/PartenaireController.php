@@ -82,7 +82,6 @@ class PartenaireController extends AbstractController
         return new JsonResponse($data);
     }
 //=================================Lister les Partenaires===============£=====================================================================================//
-
     /**
      * @Route("/listParten", name="listpartenaire", methods={"GET"})
      * @IsGranted("ROLE_SUPER_ADMIN")
