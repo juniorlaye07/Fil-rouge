@@ -44,8 +44,8 @@ security:
         #- { path: ^/api/partenaire,       roles: ROLE_SuperADMIN }
         #- { path: ^/api/utilisateur,      roles: ROLE_USER }
         - { path: ^/api/login,            roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api,                  roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/,                  roles: IS_AUTHENTICATED_FULLY }
     role_hierarchy:
         ROLE_USER:      ROLE_USER
         ROLE_ADMINParten:       ROLE_USER
-        ROLE_SuperADMIN: [  ROLE_SuperADMIN,ROLE_ADMINParten, ROLE_USER]
+        ROLE_SuperADMIN: [  ROLE_SUPER_ADMIN,ROLE_ADMIN,ROLE_USER]

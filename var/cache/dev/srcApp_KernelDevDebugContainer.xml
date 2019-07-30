@@ -132,8 +132,8 @@
         <parameter>ROLE_USER</parameter>
       </parameter>
       <parameter key="ROLE_SuperADMIN" type="collection">
-        <parameter>ROLE_SuperADMIN</parameter>
-        <parameter>ROLE_ADMINParten</parameter>
+        <parameter>ROLE_SUPER_ADMIN</parameter>
+        <parameter>ROLE_ADMIN</parameter>
         <parameter>ROLE_USER</parameter>
       </parameter>
     </parameter>
@@ -379,6 +379,7 @@
     <parameter key="doctrine_migrations.name">Application Migrations</parameter>
     <parameter key="doctrine_migrations.custom_template">null</parameter>
     <parameter key="doctrine_migrations.organize_migrations">false</parameter>
+    <parameter key="fos_rest.format_listener.rules">null</parameter>
     <parameter key="lexik_jwt_authentication.pass_phrase">%env(JWT_PASSPHRASE)%</parameter>
     <parameter key="lexik_jwt_authentication.token_ttl">3600</parameter>
     <parameter key="lexik_jwt_authentication.clock_skew">0</parameter>
@@ -1346,6 +1347,22 @@
         <argument>10</argument>
       </call>
       <call method="addListener">
+        <argument>kernel.request</argument>
+        <argument type="collection">
+          <argument type="service" id="fos_rest.format_listener"/>
+          <argument>onKernelRequest</argument>
+        </argument>
+        <argument>34</argument>
+      </call>
+      <call method="addListener">
+        <argument>kernel.controller</argument>
+        <argument type="collection">
+          <argument type="service" id="fos_rest.param_fetcher_listener"/>
+          <argument>onKernelController</argument>
+        </argument>
+        <argument>5</argument>
+      </call>
+      <call method="addListener">
         <argument>kernel.response</argument>
         <argument type="collection">
           <argument type="service" id="response_listener"/>
@@ -1648,6 +1665,22 @@
           <argument>onKernelControllerArguments</argument>
         </argument>
         <argument>0</argument>
+      </call>
+      <call method="addListener">
+        <argument>kernel.view</argument>
+        <argument type="collection">
+          <argument type="service" id="fos_rest.view_response_listener"/>
+          <argument>onKernelView</argument>
+        </argument>
+        <argument>30</argument>
+      </call>
+      <call method="addListener">
+        <argument>kernel.exception</argument>
+        <argument type="collection">
+          <argument type="service" id="fos_rest.access_denied_listener"/>
+          <argument>onKernelException</argument>
+        </argument>
+        <argument>5</argument>
       </call>
     </service>
     <service id="debug.controller_resolver" class="Symfony\Component\HttpKernel\Controller\TraceableControllerResolver" public="false">
@@ -2476,7 +2509,7 @@
         <argument>null</argument>
       </call>
       <call method="add">
-        <argument type="service" id=".security.request_matcher.cRNYaJ1"/>
+        <argument type="service" id=".security.request_matcher.D2XdegB"/>
         <argument type="collection">
           <argument>IS_AUTHENTICATED_FULLY</argument>
         </argument>
@@ -3000,8 +3033,8 @@
     <service id=".security.request_matcher.Ud1TEPV" class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
       <argument>^/api/login</argument>
     </service>
-    <service id=".security.request_matcher.cRNYaJ1" class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
-      <argument>^/api</argument>
+    <service id=".security.request_matcher.D2XdegB" class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
+      <argument>^/api/</argument>
     </service>
     <service id="security.command.user_password_encoder" class="Symfony\Bundle\SecurityBundle\Command\UserPasswordEncoderCommand" public="false">
       <tag name="console.command" command="security:encode-password"/>
@@ -4212,7 +4245,7 @@
       <tag name="console.command" command="server:run"/>
       <argument>/home/juniorlaye/Apiredfil/public</argument>
       <argument>dev</argument>
-      <argument>/home/juniorlaye/Apiredfil/var/cache</argument>
+      <argument>/home/juniorlaye/Apiredfil</argument>
       <call method="setName">
         <argument>server:run</argument>
       </call>
@@ -4221,21 +4254,21 @@
       <tag name="console.command" command="server:start"/>
       <argument>/home/juniorlaye/Apiredfil/public</argument>
       <argument>dev</argument>
-      <argument>/home/juniorlaye/Apiredfil/var/cache</argument>
+      <argument>/home/juniorlaye/Apiredfil</argument>
       <call method="setName">
         <argument>server:start</argument>
       </call>
     </service>
     <service id="web_server.command.server_stop" class="Symfony\Bundle\WebServerBundle\Command\ServerStopCommand" public="false">
       <tag name="console.command" command="server:stop"/>
-      <argument>/home/juniorlaye/Apiredfil/var/cache</argument>
+      <argument>/home/juniorlaye/Apiredfil</argument>
       <call method="setName">
         <argument>server:stop</argument>
       </call>
     </service>
     <service id="web_server.command.server_status" class="Symfony\Bundle\WebServerBundle\Command\ServerStatusCommand" public="false">
       <tag name="console.command" command="server:status"/>
-      <argument>/home/juniorlaye/Apiredfil/var/cache</argument>
+      <argument>/home/juniorlaye/Apiredfil</argument>
       <call method="setName">
         <argument>server:status</argument>
       </call>
@@ -4345,7 +4378,6 @@
       <argument type="service" id="request_stack"/>
       <argument type="collection">
         <argument key="json">false</argument>
-        <argument key="xml">false</argument>
         <argument key="html">true</argument>
       </argument>
       <argument>400</argument>
@@ -4373,32 +4405,30 @@
       <argument type="service" id="file_locator"/>
       <argument type="service" id="controller_name_converter"/>
       <argument type="service" id="fos_rest.routing.loader.reader.controller"/>
-      <argument>null</argument>
+      <argument>json</argument>
     </service>
     <service id="fos_rest.routing.loader.processor" class="FOS\RestBundle\Routing\Loader\RestRouteProcessor" public="false"/>
     <service id="fos_rest.routing.loader.yaml_collection" class="FOS\RestBundle\Routing\Loader\RestYamlCollectionLoader" public="false">
       <tag name="routing.loader"/>
       <argument type="service" id="file_locator"/>
       <argument type="service" id="fos_rest.routing.loader.processor"/>
-      <argument>true</argument>
+      <argument>false</argument>
       <argument type="collection">
         <argument key="json">false</argument>
-        <argument key="xml">false</argument>
         <argument key="html">true</argument>
       </argument>
-      <argument>null</argument>
+      <argument>json</argument>
     </service>
     <service id="fos_rest.routing.loader.xml_collection" class="FOS\RestBundle\Routing\Loader\RestXmlCollectionLoader" public="false">
       <tag name="routing.loader"/>
       <argument type="service" id="file_locator"/>
       <argument type="service" id="fos_rest.routing.loader.processor"/>
-      <argument>true</argument>
+      <argument>false</argument>
       <argument type="collection">
         <argument key="json">false</argument>
-        <argument key="xml">false</argument>
         <argument key="html">true</argument>
       </argument>
-      <argument>null</argument>
+      <argument>json</argument>
     </service>
     <service id="fos_rest.routing.loader.reader.controller" class="FOS\RestBundle\Routing\Loader\Reader\RestControllerReader" public="false">
       <argument type="service" id="fos_rest.routing.loader.reader.action"/>
@@ -4408,10 +4438,9 @@
       <argument type="service" id="annotations.cached_reader"/>
       <argument type="service" id="fos_rest.request.param_fetcher.reader"/>
       <argument type="service" id="fos_rest.inflector.doctrine"/>
-      <argument>true</argument>
+      <argument>false</argument>
       <argument type="collection">
         <argument key="json">false</argument>
-        <argument key="xml">false</argument>
         <argument key="html">true</argument>
       </argument>
       <argument>true</argument>
@@ -4436,6 +4465,11 @@
     </service>
     <service id="fos_rest.serializer.form_error_normalizer" class="FOS\RestBundle\Serializer\Normalizer\FormErrorNormalizer" public="false">
       <tag name="serializer.normalizer" priority="-10"/>
+    </service>
+    <service id="fos_rest.view_response_listener" class="FOS\RestBundle\EventListener\ViewResponseListener">
+      <tag name="kernel.event_subscriber"/>
+      <argument type="service" id="fos_rest.view_handler.default"/>
+      <argument>true</argument>
     </service>
     <service id="fos_rest.normalizer.camel_keys" class="FOS\RestBundle\Normalizer\CamelKeysNormalizer"/>
     <service id="fos_rest.normalizer.camel_keys_with_leading_underscore" class="FOS\RestBundle\Normalizer\CamelKeysNormalizerWithLeadingUnderscore"/>
@@ -4464,6 +4498,42 @@
         <argument key="fos_rest.decoder.json" type="service" id="fos_rest.decoder.json"/>
         <argument key="fos_rest.decoder.xml" type="service" id="fos_rest.decoder.xml"/>
       </argument>
+    </service>
+    <service id="fos_rest.format_listener" class="FOS\RestBundle\EventListener\FormatListener">
+      <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="34"/>
+      <tag name="container.hot_path"/>
+      <argument type="service" id="fos_rest.format_negotiator"/>
+    </service>
+    <service id="fos_rest.format_negotiator" class="FOS\RestBundle\Negotiation\FormatNegotiator">
+      <argument type="service" id="request_stack"/>
+      <call method="add">
+        <argument type="service" id="fos_rest.request_matcher.2364365e6bb6bfd5cadeda231e59db9139fadac2b673beb794ba3c0068839a899dc3c386"/>
+        <argument type="collection">
+          <argument key="prefer_extension">2.0</argument>
+          <argument key="fallback_format">json</argument>
+          <argument key="priorities" type="collection">
+            <argument>json</argument>
+          </argument>
+          <argument key="methods">null</argument>
+          <argument key="attributes" type="collection"/>
+          <argument key="stop">false</argument>
+        </argument>
+      </call>
+    </service>
+    <service id="fos_rest.format_request_matcher" class="Symfony\Component\HttpFoundation\RequestMatcher" public="false" abstract="true"/>
+    <service id="fos_rest.param_fetcher_listener" class="FOS\RestBundle\EventListener\ParamFetcherListener">
+      <tag name="kernel.event_listener" event="kernel.controller" method="onKernelController" priority="5"/>
+      <tag name="container.hot_path"/>
+      <argument type="service" id="fos_rest.request.param_fetcher"/>
+      <argument>false</argument>
+    </service>
+    <service id="fos_rest.access_denied_listener" class="FOS\RestBundle\EventListener\AccessDeniedListener">
+      <tag name="kernel.event_subscriber"/>
+      <tag name="monolog.logger" channel="request"/>
+      <argument type="collection">
+        <argument key="json">true</argument>
+      </argument>
+      <argument>null</argument>
     </service>
     <service id="lexik_jwt_authentication.check_config_command" class="Lexik\Bundle\JWTAuthenticationBundle\Command\CheckConfigCommand" public="true">
       <tag name="console.command" command="lexik:jwt:check-config"/>
@@ -4918,6 +4988,13 @@
         <argument key="App\Repository\TransactionRepository" type="service" id="App\Repository\TransactionRepository"/>
         <argument key="App\Repository\UtilisateurRepository" type="service" id="App\Repository\UtilisateurRepository"/>
       </argument>
+    </service>
+    <service id="fos_rest.request_matcher.2364365e6bb6bfd5cadeda231e59db9139fadac2b673beb794ba3c0068839a899dc3c386" class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
+      <argument>^/api</argument>
+      <argument>null</argument>
+      <argument>null</argument>
+      <argument>null</argument>
+      <argument type="collection"/>
     </service>
     <service id="logger" class="Symfony\Component\HttpKernel\Log\Logger" public="false"/>
     <service id=".service_locator.UwRI0uT" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">

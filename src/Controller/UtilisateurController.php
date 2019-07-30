@@ -35,9 +35,10 @@ class UtilisateurController extends AbstractController
             'username' => $user->getUsername()
         ]);
     }
-//====================Ajouter utilisateur==================================£========================================================================================================================£
+    //====================Ajouter utilisateur==================================£========================================================================================================================£
     /**
      * @Route("/utilisateur", name="register", methods={"POST"})
+     * @IsGranted("ROLE_ADMIN",message="Acces refusé!")
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager)
     {
@@ -47,7 +48,7 @@ class UtilisateurController extends AbstractController
             $user = new Utilisateur();
             $user->setUsername($values->username);
             $user->setPassword($passwordEncoder->encodePassword($user,$values->password));
-            $user->setRoles($user->getRoles());
+            $user->setRoles(['ROLE_USER']);
             $user->setNom($values->nom);
             $user->setPrenom($values->prenom);
             $user->setTel($values->tel);
