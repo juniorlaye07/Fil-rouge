@@ -23,7 +23,7 @@ security:
                success_handler:      lexik_jwt_authentication.handler.authentication_success
                failure_handler:      lexik_jwt_authentication.handler.authentication_failure
         api:
-            pattern:   ^/api/
+            pattern:   ^/api/t
             stateless: true
             guard:
                 authenticators:
@@ -43,7 +43,7 @@ security:
         #- { path: ^/api/partenaire,       roles: ROLE_SuperADMIN }
         #- { path: ^/api/utilisateur,      roles: ROLE_USER }
         - { path: ^/api/login,            roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api,                  roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/t,                  roles: IS_AUTHENTICATED_FULLY }
     role_hierarchy:
         ROLE_USER:      ROLE_USER
         ROLE_ADMINParten:       ROLE_USER
