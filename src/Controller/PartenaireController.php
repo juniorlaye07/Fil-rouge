@@ -12,6 +12,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 /**
  * @Route("/api")
  */
@@ -78,11 +79,12 @@ class PartenaireController extends AbstractController
         ];
         return new JsonResponse($data);
     }
+//=================================Lister les Partenaires===============£=====================================================================================//
 
      /**
-     * @Route("/liste", name="list_partenaire", methods={"POST"})
+     * @Route("/listParten", name="listpartenaire", methods={"GET"})
      */
-    public function list(PartenaireRepository $partenaireRepository, SerializerInterface $serializer)
+    public function listParten(PartenaireRepository $partenaireRepository, SerializerInterface $serializer)
     {
         $partenaires = $partenaireRepository->findAll();
         $data = $serializer->serialize($partenaires, 'json');

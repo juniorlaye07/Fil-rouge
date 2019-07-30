@@ -1466,6 +1466,14 @@
         <argument>2048</argument>
       </call>
       <call method="addListener">
+        <argument>console.command</argument>
+        <argument type="collection">
+          <argument type="service" id="debug.debug_handlers_listener"/>
+          <argument>configure</argument>
+        </argument>
+        <argument>2048</argument>
+      </call>
+      <call method="addListener">
         <argument>kernel.exception</argument>
         <argument type="collection">
           <argument type="service" id="debug.debug_handlers_listener"/>
@@ -2306,6 +2314,7 @@
         <argument type="service" id="security.authentication.provider.dao.login"/>
         <argument type="service" id="security.authentication.provider.anonymous.login"/>
         <argument type="service" id="security.authentication.provider.guard.api"/>
+        <argument type="service" id="security.authentication.provider.dao.api"/>
       </argument>
       <argument>true</argument>
       <call method="setEventDispatcher">
@@ -2916,6 +2925,7 @@
       <argument>null</argument>
       <argument type="collection">
         <argument>guard</argument>
+        <argument>http_basic</argument>
       </argument>
       <argument>null</argument>
     </service>
@@ -2940,6 +2950,23 @@
       </argument>
       <argument type="service" id="logger" on-invalid="null"/>
     </service>
+    <service id="security.authentication.provider.dao.api" class="Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider" public="false">
+      <argument type="service" id="security.user.provider.concrete.app_user_provider"/>
+      <argument type="service" id="security.user_checker"/>
+      <argument>api</argument>
+      <argument type="service" id="security.encoder_factory.generic"/>
+      <argument>true</argument>
+    </service>
+    <service id="security.authentication.listener.basic.api" class="Symfony\Component\Security\Http\Firewall\BasicAuthenticationListener" public="false">
+      <argument type="service" id="security.token_storage"/>
+      <argument type="service" id="security.authentication.manager"/>
+      <argument>api</argument>
+      <argument type="service" id="lexik_jwt_authentication.security.guard.jwt_token_authenticator"/>
+      <argument type="service" id="logger" on-invalid="null"/>
+      <call method="setSessionAuthenticationStrategy">
+        <argument type="service" id="security.authentication.session_strategy_noop"/>
+      </call>
+    </service>
     <service id="security.exception_listener.api" class="Symfony\Component\Security\Http\Firewall\ExceptionListener" public="false">
       <argument type="service" id="security.token_storage"/>
       <argument type="service" id="security.authentication.trust_resolver"/>
@@ -2955,6 +2982,7 @@
       <argument type="iterator">
         <argument type="service" id="security.channel_listener"/>
         <argument type="service" id="security.authentication.listener.guard.api"/>
+        <argument type="service" id="security.authentication.listener.basic.api"/>
         <argument type="service" id="security.access_listener"/>
       </argument>
       <argument type="service" id="security.exception_listener.api"/>
@@ -4757,13 +4785,11 @@
         <argument key="serializer" type="service" id="serializer"/>
       </argument>
     </service>
-    <service id=".service_locator.H3qnu8f" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id=".service_locator.JBoVXlr" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="entityManager" type="service" id="doctrine.orm.default_entity_manager"/>
         <argument key="passwordEncoder" type="service" id="security.user_password_encoder.generic"/>
-        <argument key="serializer" type="service" id="serializer"/>
-        <argument key="validator" type="service" id="validator"/>
       </argument>
     </service>
     <service id=".service_locator.nk9g.Cv" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
@@ -4775,31 +4801,22 @@
         <argument key="validator" type="service" id="validator"/>
       </argument>
     </service>
-    <service id=".service_locator.HOpYJK8" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
-      <tag name="container.service_locator"/>
-      <argument type="collection">
-        <argument key="serializer" type="service" id="serializer"/>
-        <argument key="utilisateurRepository" type="service" id="App\Repository\UtilisateurRepository"/>
-      </argument>
-    </service>
-    <service id=".service_locator.GC4EQ1g" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id=".service_locator.cFAHmZA" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Controller\CaisierController::FaireDepot" type="service" id=".service_locator.ZIsCxOI"/>
         <argument key="App\Controller\CaisierController::new" type="service" id=".service_locator.ZIsCxOI"/>
         <argument key="App\Controller\PartenaireController::add" type="service" id=".service_locator.ZIsCxOI"/>
-        <argument key="App\Controller\PartenaireController::list" type="service" id=".service_locator.eIEYWuf"/>
+        <argument key="App\Controller\PartenaireController::listParten" type="service" id=".service_locator.eIEYWuf"/>
         <argument key="App\Controller\PartenaireController::update" type="service" id=".service_locator..paYi0V"/>
-        <argument key="App\Controller\UtilisateurController::list" type="service" id=".service_locator.HOpYJK8"/>
-        <argument key="App\Controller\UtilisateurController::register" type="service" id=".service_locator.H3qnu8f"/>
+        <argument key="App\Controller\UtilisateurController::register" type="service" id=".service_locator.JBoVXlr"/>
         <argument key="App\Controller\UtilisateurController::updat" type="service" id=".service_locator.nk9g.Cv"/>
         <argument key="App\Controller\CaisierController:FaireDepot" type="service" id=".service_locator.ZIsCxOI"/>
         <argument key="App\Controller\CaisierController:new" type="service" id=".service_locator.ZIsCxOI"/>
         <argument key="App\Controller\PartenaireController:add" type="service" id=".service_locator.ZIsCxOI"/>
-        <argument key="App\Controller\PartenaireController:list" type="service" id=".service_locator.eIEYWuf"/>
+        <argument key="App\Controller\PartenaireController:listParten" type="service" id=".service_locator.eIEYWuf"/>
         <argument key="App\Controller\PartenaireController:update" type="service" id=".service_locator..paYi0V"/>
-        <argument key="App\Controller\UtilisateurController:list" type="service" id=".service_locator.HOpYJK8"/>
-        <argument key="App\Controller\UtilisateurController:register" type="service" id=".service_locator.H3qnu8f"/>
+        <argument key="App\Controller\UtilisateurController:register" type="service" id=".service_locator.JBoVXlr"/>
         <argument key="App\Controller\UtilisateurController:updat" type="service" id=".service_locator.nk9g.Cv"/>
       </argument>
     </service>
@@ -5064,12 +5081,12 @@
       <argument type="service" id="security.token_storage"/>
     </service>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver" public="false">
-      <argument type="service" id=".service_locator.GC4EQ1g"/>
+      <argument type="service" id=".service_locator.cFAHmZA"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver" public="false"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver" public="false"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver" public="false">
-      <argument type="service" id=".service_locator.GC4EQ1g"/>
+      <argument type="service" id=".service_locator.cFAHmZA"/>
     </service>
     <service id="api_platform.swagger.normalizer.api_gateway.inner" class="ApiPlatform\Core\Swagger\Serializer\DocumentationNormalizer" public="false">
       <argument type="service" id="api_platform.metadata.resource.metadata_factory.cached"/>
@@ -5420,7 +5437,7 @@
     <service id="lexik_jwt_authentication.encoder" alias="lexik_jwt_authentication.encoder.lcobucci" public="true"/>
     <service id="Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface" alias="lexik_jwt_authentication.encoder.lcobucci"/>
     <service id="lexik_jwt_authentication.key_loader" alias="lexik_jwt_authentication.key_loader.raw" public="true"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.GC4EQ1g"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.cFAHmZA"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem" public="false"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="api_platform.name_converter" alias="serializer.name_converter.metadata_aware"/>

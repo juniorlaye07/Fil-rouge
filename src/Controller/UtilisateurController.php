@@ -16,6 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
+
 /**
  * @Route("/api")
  */
@@ -34,11 +35,11 @@ class UtilisateurController extends AbstractController
             'username' => $user->getUsername()
         ]);
     }
-//====================Ajouter utilisateur==================================£========"================================================================================================================£
+//====================Ajouter utilisateur==================================£========================================================================================================================£
     /**
      * @Route("/utilisateur", name="register", methods={"POST"})
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator, SerializerInterface $serializer, EntityManagerInterface $entityManager)
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager)
     {
         $values = json_decode($request->getContent());
        
@@ -46,7 +47,7 @@ class UtilisateurController extends AbstractController
             $user = new Utilisateur();
             $user->setUsername($values->username);
             $user->setPassword($passwordEncoder->encodePassword($user,$values->password));
-            $user->setRoles($user->getRoles(['ROLE_USER']));
+            $user->setRoles($user->getRoles());
             $user->setNom($values->nom);
             $user->setPrenom($values->prenom);
             $user->setTel($values->tel);
@@ -101,18 +102,6 @@ class UtilisateurController extends AbstractController
             'messag' => 'Le statuts de l\'utilisateur a été mis à jour'
         ];
         return new JsonResponse($data);
-    }
-     /**
-     * @Route("/listes", name="list_partenaire", methods={"POST"})
-     */
-    public function list(UtilisateurRepository $utilisateurRepository, SerializerInterface $serializer)
-    {
-        $utilisateurs = $utilisateurRepository->findAll();
-        $data = $serializer->serialize($utilisateurs, 'json');
-
-        return new Response($data, 200, [
-            'Content-Type' => 'application/json'
-        ]);
     }
 //======================================================================================================================================================//
 }

@@ -11,12 +11,12 @@ return [
         '/api/compte' => [[['_route' => 'comptbk', '_controller' => 'App\\Controller\\CaisierController::new'], null, ['POST' => 0], null, false, false, null]],
         '/api/depocompte' => [[['_route' => 'depot', '_controller' => 'App\\Controller\\CaisierController::FaireDepot'], null, ['POST' => 0], null, false, false, null]],
         '/api/partenaire' => [[['_route' => 'partenaire', '_controller' => 'App\\Controller\\PartenaireController::add'], null, ['POST' => 0], null, false, false, null]],
+        '/api/listParten' => [[['_route' => 'listpartenaire', '_controller' => 'App\\Controller\\PartenaireController::listParten'], null, ['GET' => 0], null, false, false, null]],
         '/api/login' => [
             [['_route' => 'login', '_controller' => 'App\\Controller\\UtilisateurController::login'], null, ['POST' => 0], null, false, false, null],
             [['_route' => 'api_login_check'], null, null, null, false, false, null],
         ],
         '/api/utilisateur' => [[['_route' => 'register', '_controller' => 'App\\Controller\\UtilisateurController::register'], null, ['POST' => 0], null, false, false, null]],
-        '/api/listes' => [[['_route' => 'list_partenaire', '_controller' => 'App\\Controller\\UtilisateurController::list'], null, ['POST' => 0], null, false, false, null]],
     ],
     [ // $regexpList
         0 => '{^(?'
