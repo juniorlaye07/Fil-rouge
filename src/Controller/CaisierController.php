@@ -21,7 +21,6 @@ class CaisierController extends AbstractController
     //======================Créer un compte=================================£==============================================//
     /** 
      * @Route("/compte", name="comptbk", methods={"POST"})
-     * @IsGranted("ROLE_SUPER_ADMIN")
      */
     public function new(Request $request,EntityManagerInterface $entityManager ): Response
     {
@@ -52,7 +51,6 @@ class CaisierController extends AbstractController
     //=============Faire un dépot d'argent===========================£================================================================//
     /**
      * @Route("/depocompte", name="depot", methods={"POST"})
-     * @IsGranted("ROLE_SUPER_ADMIN")
      */
     public function FaireDepot(Request $request,  EntityManagerInterface $entityManager)
     {

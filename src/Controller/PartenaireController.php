@@ -21,7 +21,6 @@ class PartenaireController extends AbstractController
 //==============Ajouter un partenaire====================================£============================================================//    
     /**
      * @Route("/partenaire", name="partenaire", methods={"POST"})
-     * @IsGranted("ROLE_SUPER_ADMIN")
      */
     public function add(Request $request, EntityManagerInterface $entityManager)
     {
@@ -54,7 +53,6 @@ class PartenaireController extends AbstractController
 //=================Bloquer un partenaire========================£======================================================================================================//
     /**
      * @Route("/partenaire/{id}", name="updatparten", methods={"PUT"})
-     * @IsGranted("ROLE_SUPER_ADMIN")
      */
     public function update(Request $request, SerializerInterface $serializer, Partenaire $parten, ValidatorInterface $validator, EntityManagerInterface $entityManager)
     {
@@ -84,7 +82,6 @@ class PartenaireController extends AbstractController
 //=================================Lister les Partenaires===============£=====================================================================================//
     /**
      * @Route("/listParten", name="listpartenaire", methods={"GET"})
-     * @IsGranted("ROLE_SUPER_ADMIN")
      */
     public function listParten(PartenaireRepository $partenaireRepository, SerializerInterface $serializer)
     {

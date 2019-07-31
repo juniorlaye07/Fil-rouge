@@ -6,7 +6,6 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ApiResource()
@@ -23,7 +22,6 @@ class Comptbank
 
     /**
      * @ORM\Column(type="integer")
-     * @UniqueEntity(fields={"numcompte"},message="Veillez vérifier votre numéro de compte")
      */
     private $numcompte;
 

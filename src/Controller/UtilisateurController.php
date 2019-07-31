@@ -38,7 +38,6 @@ class UtilisateurController extends AbstractController
     //====================Ajouter utilisateur==================================£========================================================================================================================£
     /**
      * @Route("/utilisateur", name="register", methods={"POST"})
-     * @IsGranted("ROLE_ADMIN",message="Acces refusé!")
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager)
     {
